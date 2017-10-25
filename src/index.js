@@ -11,6 +11,9 @@ import { Button } from 'react-native-elements';
 import styles from '../components/assets/style';
 
 export default class App extends Component<{}> {
+	componentWillMount(){
+		this.props.navigation.navigate('Add')
+	}
   render() {
   	console.ignoredYellowBox = ['Remote debugger'];
 		console.ignoredYellowBox = ['Setting a timer'];
