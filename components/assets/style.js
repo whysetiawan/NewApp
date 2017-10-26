@@ -18,6 +18,12 @@ const styles = StyleSheet.create({
     margin: 7,
     color: 'black'
   },
+  multiFormInput: {
+    width: 380,
+    height: 190,
+    margin: 7,
+    color: 'black'
+  },
   container: {
     flex: 1,
     backgroundColor: '#f8f8ff',
@@ -39,16 +45,32 @@ const styles = StyleSheet.create({
     borderColor: '#f5fffa',
     margin: 10,
   },
+  buttonEnd: {
+    width: 380,
+    height: 60,
+    backgroundColor: 'rgba(52, 52, 52, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: '#f5fffa',
+    margin: 10,
+  },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#f5fffa'
   },
   textTitle: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '500',
     color: '#222'
   },
+  normalText : {
+    color: '#000000',
+    marginBottom: 10,
+    fontSize: 14
+  }
 })
 
 export default styles

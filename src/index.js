@@ -12,7 +12,7 @@ import styles from '../components/assets/style';
 
 export default class App extends Component<{}> {
 	componentWillMount(){
-		this.props.navigation.navigate('Add')
+		this.props.navigation.navigate('Menu')
 	}
   render() {
   	console.ignoredYellowBox = ['Remote debugger'];
