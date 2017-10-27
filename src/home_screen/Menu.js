@@ -15,6 +15,7 @@ import {
 import styles from '../../components/assets/style';
 import firebase from '../../components/assets/Firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MapView from 'react-native-maps';
 import { 
   Card,
   ListItem,

@@ -11,8 +11,10 @@ import MyStudio from '../src/home_screen/My Studio';
 import EditStudio from '../src/home_screen/Edit Studio';
 import Schedule from '../src/home_screen/Schedule';
 import MyProfile from '../src/home_screen/My Profile';
+import App from '../src/home_screen/Maps';
 
 export const Stack = StackNavigator({
+	Maps: { screen:App },
 	Index: { screen:Index },
 	Login: { screen:Login },
 	Register: { screen:Register },

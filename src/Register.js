@@ -10,7 +10,7 @@ import {
 import { Button } from 'react-native-elements';
 import styles from '../components/assets/style';
 import { FormLabel, FormInput} from 'react-native-elements'
-import firebase from '../components/assets/Firebase'
+import firebase from '../components/assets/Firebase';
 
 export default class App extends Component<{}> {
 	constructor(){

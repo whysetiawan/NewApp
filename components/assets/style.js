@@ -78,7 +78,10 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     flexDirection:'row', 
     justifyContent:'space-between'
-  }
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
 })
 
 export default styles
