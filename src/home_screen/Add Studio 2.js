@@ -59,7 +59,7 @@ export default class AddStudio extends Component<{}> {
 	Next(){
 		let studioData = {
 			description: this.state.description,
-			cost: this.state.description,
+			cost: this.state.cost,
 		}
 		AsyncStorage.mergeItem('studioData', JSON.stringify(studioData)).then(() => {
 			this.props.navigation.navigate('Add3')

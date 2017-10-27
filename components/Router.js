@@ -10,6 +10,7 @@ import Detail from '../src/home_screen/Detail';
 import MyStudio from '../src/home_screen/My Studio';
 import EditStudio from '../src/home_screen/Edit Studio';
 import Schedule from '../src/home_screen/Schedule';
+import MyProfile from '../src/home_screen/My Profile';
 
 export const Stack = StackNavigator({
 	Index: { screen:Index },
@@ -23,4 +24,5 @@ export const Stack = StackNavigator({
 	MyStudio: { screen:MyStudio },
 	EditStudio: { screen:EditStudio },
 	Schedule: { screen:Schedule },
+	MyProfile: { screen:MyProfile },
 })

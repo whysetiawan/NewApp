@@ -42,6 +42,8 @@ export default class Detail extends Component<{}> {
     })
   }
   render(){
+    console.ignoredYellowBox = ['Remote debugger'];
+    console.ignoredYellowBox = ['Setting a timer'];
     const items = this.state.data
     return(
       <View>

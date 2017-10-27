@@ -22,6 +22,7 @@ import firebase from '../../components/assets/Firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
+import * as Progress from 'react-native-progress';
 
 	const Blob = RNFetchBlob.polyfill.Blob
 	const fs = RNFetchBlob.fs
@@ -37,12 +38,8 @@ export default class AddStudio extends Component<{}> {
 		this.state = {
 			name: '',
 			address: '',
-			cost: '',
-			description: '',
-			images: [],
-			imagesURL : [],
-			user: {},
-			uploading: false
+			open: '',
+			close: ''
 		}
 	}
 
@@ -54,16 +51,20 @@ export default class AddStudio extends Component<{}> {
       	user: userData
       })
     })
+    AsyncStorage.getItem('studioData').then((data) => {
+    	console.log(data)
+    })
 	}
 
-	Register(){
-		this.setState({ uploading: true });
-		database.ref('Studio').child(this.state.user.uid).push({
+	Next(){
+		let studioData = {
 			name: this.state.name,
 			address: this.state.address,
-			cost: this.state.cost,
-			images: this.state.imagesURL,
-			description: this.state.description,
+			open: this.state.open,
+			close: this.state.close,
+		}
+		AsyncStorage.setItem('studioData', JSON.stringify(studioData)).then(() => {
+			this.props.navigation.navigate('Add2')
 		})
 	}
 
@@ -118,8 +119,6 @@ export default class AddStudio extends Component<{}> {
 	}
 
   render() {
-  	console.log(this.state.images)
-  	console.log(this.state.imagesURL)
 		console.ignoredYellowBox = ['Remote debugger'];
 		console.ignoredYellowBox = ['Setting a timer'];
     return (
@@ -130,7 +129,12 @@ export default class AddStudio extends Component<{}> {
      			centerComponent= {{ text:'Register Studio', style:{ fontSize:20, fontWeight:'bold', color:'#fff'}}}
      		/>
      		<View style={{marginTop: 80}}>
-	  			<Text style={styles.textTitle}> Step 1 </Text>
+     			<Progress.Bar 
+     				progress={0.3} 
+     				width={412} 
+     				color='#222'
+     			/>
+
 	  				<View>
 	  					<FormLabel>Studio Name</FormLabel>
 		      			<FormInput 
@@ -146,42 +150,28 @@ export default class AddStudio extends Component<{}> {
 					      	style={styles.formInput}
 					      />
 
-	  					<FormLabel>Cost per Hour</FormLabel>
+	  					<FormLabel> Open </FormLabel>
 				  			<FormInput 
-					      	onChangeText={(cost) => this.setState({cost})}
-					      	placeholder='Cost'
+					      	onChangeText={(open) => this.setState({open})}
+					      	placeholder='Ex: 08:00'
 					      	style={styles.formInput}
 					      />
 
-		      		<FormLabel>Description</FormLabel>
+					    <FormLabel> Close </FormLabel>
 				  			<FormInput 
-					      	onChangeText={(description) => this.setState({description})}
-					      	placeholder='Describe your studio'
-					      	style={styles.multiFormInput}
-					      	multiline={true}
-					      	numberOfLines={10}
+					      	onChangeText={(close) => this.setState({close})}
+					      	placeholder='Ex: 20.00'
+					      	style={styles.formInput}
 					      />
 
-		      					<View  style={{flexDirection:'row'}}>
-								      <TouchableOpacity
-								      	onPress={this.addByGallery.bind(this)}
-								      >
-		      							<Icon name='md-images' size={30} color='#000000' style={{marginLeft:30, marginRight: 10}}/>
-		      						</TouchableOpacity>
-		      						<TouchableOpacity
-							      		onPress={this.addByCamera.bind(this)}
-							      	>
-		     							 <Icon name='md-camera' size={30} color='#000000'/>
-		     							</TouchableOpacity>
-		      					</View>
 		      		</View>
 		      </View>
 
 		  			<TouchableOpacity
 			       	style={styles.button}
-			       	onPress={this.Register.bind(this)}
+			       	onPress={this.Next.bind(this)}
 			      >
-		        <Text style={styles.buttonText}> {this.state.uploading ? 'Processing..' : 'Register'} </Text>
+		        <Text style={styles.buttonText}> Next </Text>
 		      </TouchableOpacity>
 		  </ScrollView>
 	  </View>

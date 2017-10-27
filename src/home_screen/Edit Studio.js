@@ -28,6 +28,7 @@ export default class EditStudio extends Component<{}> {
     super();
     this.state = {
       user: {},
+      key: '',
       name: '',
       address: '',
       cost: '',
@@ -47,6 +48,7 @@ export default class EditStudio extends Component<{}> {
     const data = params.data;
     console.log(data)
     this.setState({
+      key: data.key,
       name: data.name,
       address: data.address,
       cost: data.cost,
@@ -54,11 +56,19 @@ export default class EditStudio extends Component<{}> {
     })
   }
 
-  Update(){
-
+  Edit(){
+    const data = this.state
+    firebase.database().ref('Studio').child(`${this.state.user.uid}/${this.state.key}`).update({
+      name: data.name,
+      address: data.address,
+      cost: data.cost,
+      description: data.description
+    })
   }
 
   render(){
+    console.ignoredYellowBox = ['Remote debugger'];
+    console.ignoredYellowBox = ['Setting a timer'];
     console.log(this.state.user)
     return(
       <View>
@@ -103,7 +113,7 @@ export default class EditStudio extends Component<{}> {
                 />
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={this.Update.bind(this)}
+                  onPress={this.Edit.bind(this)}
                 >
                 <Text style={styles.buttonText}> {this.state.uploading ? 'Processing..' : 'Save'} </Text>
               </TouchableOpacity>

@@ -9,7 +9,8 @@ import {
   AsyncStorage,
   Image,
   ListView,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import styles from '../../components/assets/style';
 import firebase from '../../components/assets/Firebase';
@@ -98,6 +99,7 @@ export default class Menu extends Component<{}> {
     const { navigate } = this.props.navigation
     return (
         <View>
+          <ScrollView>
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigate('Add')}
@@ -112,12 +114,20 @@ export default class Menu extends Component<{}> {
               <Text style={styles.buttonText}> My Studio </Text>
             </TouchableOpacity>
 
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigate('MyProfile')}
+            >
+              <Text style={styles.buttonText}> My Profile </Text>
+            </TouchableOpacity>
+
             <ListView
               dataSource={this.state.dataSource}
               renderRow={this.renderRow.bind(this)}
               enableEmptySections={true}
               />
-          </View>
+          </ScrollView>
+        </View>
     );
   }
 }

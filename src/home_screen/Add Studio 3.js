@@ -17,7 +17,7 @@ import {
   ScrollView
 } from 'react-native';
 import styles from '../../components/assets/style';
-import { FormLabel, FormInput, Header} from 'react-native-elements';
+import { FormLabel, FormInput, Header, Card} from 'react-native-elements';
 import firebase from '../../components/assets/Firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -36,7 +36,6 @@ export default class AddStudio extends Component<{}> {
 	constructor(){
 		super();
 		this.state = {
-			images: [],
 			imagesURL : [],
 			user: {},
 			images: [],
@@ -61,25 +60,14 @@ export default class AddStudio extends Component<{}> {
     })
 	}
 
-	Next(){
-		let studioData = {
-			description: this.state.description,
-			cost: this.state.description,
-		}
-		AsyncStorage.setItem('studioData', JSON.stringify(studioData))
-	}
-
-	addByGallery(){
-		ImagePicker.openPicker({
-			multiple: true
-		}).then((images) => {
-			let urls = []
-		for (i in images){
-			const image = images[i]
+	Submit(){
+		let urls = []
+		for (i in this.state.images){
+			const image = this.state.images[i]
 			const path = image.path
 			const sessionId = new Date().getTime()
 			let uploadBlob = null
-			const imageRef = storage.ref('Studio').child(`${this.state.user.uid}/images${[i]} - ${sessionId}`)
+			const imageRef = storage.ref('Studio').child(`${this.state.user.uid}/images - ${sessionId}`)
 			let mime = 'image/jpg'
 			fs.readFile(path, 'base64')
 			.then((data) => {
@@ -108,6 +96,25 @@ export default class AddStudio extends Component<{}> {
 				console.log(e)
 			})
 		}
+		if (this.state.images.length === this.state.imagesURL.length){
+				database.ref('Studio').child(this.state.user.uid).push({
+					name: this.state.data.name,
+					address: this.state.data.address,
+					open: this.state.data.open,
+					close: this.state.data.close,
+					cost:this.state.data.cost,
+					description: this.state.data.description,
+					images: this.state.imagesURL
+				})
+			}
+	}
+
+	addByGallery(){
+		ImagePicker.openPicker({
+			multiple: true
+		}).then((images) => {
+			this.setState({ images: images})
+			console.log(this.state.images)
 		})
 	}
 
@@ -138,7 +145,7 @@ export default class AddStudio extends Component<{}> {
      			/>
 
 	  								<FormLabel labelStyle={{ color:'black', fontSize: 16, marginBottom: 10}} >Add Photos</FormLabel>
-	  				<View  style={{flexDirection:'row'}}>
+	  				<View  style={{flexDirection:'row', marginBottom:50}}>
                       <TouchableOpacity
                         onPress={this.addByGallery.bind(this)}
                       >
@@ -151,14 +158,37 @@ export default class AddStudio extends Component<{}> {
                       </TouchableOpacity>
                     </View>
 		      	</View>
-		      	<View style={{alignSelf: 'flex-end', justifyContent:'flex-end'}}>
+		      	<Card flexDirection='row'>
+		      		<Text style={styles.normalText}> Studio Name : </Text>
+		      		<Text style={styles.normalText}> {this.state.data.name} </Text>
+		      	</Card>
+
+		      	<Card flexDirection='row'>
+		      		<Text style={styles.normalText}> Address : </Text>
+		      		<Text style={styles.normalText}> {this.state.data.address} </Text>
+		      	</Card>
+
+		      	<Card flexDirection='row'>
+		      		<Text style={styles.normalText}> Description : </Text>
+		      		<Text style={styles.normalText}> {this.state.data.description} </Text>
+		      	</Card>
+
+		      	<Card flexDirection='row'>
+		      		<Text style={styles.normalText}> Open : </Text>
+		      		<Text style={styles.normalText}> {this.state.data.open} - {this.state.data.close} </Text>
+		      	</Card>
+
+		      	<Card flexDirection='row'>
+		      		<Text style={styles.normalText}> Cost : </Text>
+		      		<Text style={styles.normalText}> RP. {this.state.data.cost}/Hour </Text>
+		      	</Card>
+
 		  			<TouchableOpacity
 			       	style={styles.buttonEnd}
-			       	onPress={this.Next.bind(this)}
+			       	onPress={this.Submit.bind(this)}
 			      >
-		        <Text style={styles.buttonText}> Next </Text>
+		        <Text style={styles.buttonText}> Submit </Text>
 		      </TouchableOpacity>
-		      </View>
 		  </ScrollView>
 	  </View>
     );

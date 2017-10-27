@@ -28,11 +28,13 @@ export default class EditStudio extends Component<{}> {
     super();
     this.state = {
       user: {},
+      key: '',
       name: '',
       address: '',
       cost: '',
       description: '',
       date: '',
+      time: '',
 
     }
   }
@@ -45,8 +47,9 @@ export default class EditStudio extends Component<{}> {
     })
     let { params } = this.props.navigation.state;
     const data = params.data;
-    console.log(data)
+    console.log(data.key)
     this.setState({
+    	key: data.key,
       name: data.name,
       address: data.address,
       cost: data.cost,
@@ -55,43 +58,54 @@ export default class EditStudio extends Component<{}> {
   }
 
   Update(){
-
+  	const date = new Date(this.state.data)
+  	firebase.database().ref('Studio').child(`${this.state.user.uid}/${this.state.key}/`).update({
+  		schedule: date
+  	})
   }
 
   render(){
-    console.log(this.state.user)
+    console.ignoredYellowBox = ['Remote debugger'];
+    console.ignoredYellowBox = ['Setting a timer'];
     return(
       <View>
         <Header
           backgroundColor='#222'
-          centerComponent={{ text: 'Edit Studio', style:{ fontSize:20, fontWeight:'bold', color:'#fff'}}}
+          centerComponent={{ text: 'Update Schedule', style:{ fontSize:20, fontWeight:'bold', color:'#fff'}}}
         />
           <View style={{ marginTop: 80 }}>
-          <FormLabel> Date </FormLabel>
-                <DatePicker
-                  style={{width: 200}}
-                  date={this.state.date}
-                  mode="date"
-                  placeholder="SELECT DATE"
-                  format="YYYY-MM-DD"
-                  minDate="2017-01-01"
-                  maxDate="2017-12-31"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0
-                    },
-                    dateInput: {
-                      marginLeft: 36
-                    }
-                  }}
-                  onDateChange={(date) => {this.setState({date: date})}}
-                />
-
+				      <View style={{flexDirection:'row'}}>
+		          	<DatePicker
+				          style={{width: 150, margin:10}}
+				          date={this.state.date}
+				          mode="date"
+				          placeholder="Select Date"
+				          format="YYYY/MM/DD"
+				          minDate="2017-01-01"
+				          maxDate="2018-12-31"
+				          onDateChange={(date) => {this.setState({date: date});}}
+				        />
+				        <DatePicker
+				        	style={{width:150, margin:10}}
+				        	mode="time"
+				        	format="HH:mm"
+				        	minuteInterval={10}
+				        	onDateChange={(time) => this.setState({time})}
+				        	placeholder='Select Time'
+				        	/>
+				        </View>
+				        <Text>
+				        	{this.state.time}
+				        </Text>
+				        <Text>
+				        	{this.state.date}
+				        </Text>
+				        <TouchableOpacity
+                  style={styles.button}
+                  onPress={this.Update.bind(this)}
+                >
+                <Text style={styles.buttonText}> Update </Text>
+              </TouchableOpacity>
           </View>
       </View>
     )

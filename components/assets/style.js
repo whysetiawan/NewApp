@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8ff',
-    alignItems: 'center',
+  },
+  containerCenter: {
+    alignItems:'center',
     justifyContent: 'center'
   },
   mainIndex: {
@@ -70,6 +72,12 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginBottom: 10,
     fontSize: 14
+  },
+  profileDivider: {
+    margin: 20,
+    marginBottom: 0,
+    flexDirection:'row', 
+    justifyContent:'space-between'
   }
 })
 

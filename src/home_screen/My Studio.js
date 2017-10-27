@@ -30,7 +30,7 @@ export default class MyStudio extends Component<{}> {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
     AsyncStorage.getItem('user').then((data) => {
       let userData = JSON.parse(data)
       this.setState({ user: userData })
@@ -84,6 +84,8 @@ export default class MyStudio extends Component<{}> {
   }
 
   render(){
+    console.ignoredYellowBox = ['Remote debugger'];
+    console.ignoredYellowBox = ['Setting a timer'];
     console.log(this.state.dataSource)
     return(
       <View>
