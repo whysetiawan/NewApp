@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import styles from '../../components/assets/style';
 import { FormLabel, FormInput, Header} from 'react-native-elements';
+import RNGooglePlaces from 'react-native-google-places';
 import firebase from '../../components/assets/Firebase';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -39,7 +40,11 @@ export default class AddStudio extends Component<{}> {
 			name: '',
 			address: '',
 			open: '',
-			close: ''
+			close: '',
+			location: {
+				longitude: null,
+				latitude: null
+			},
 		}
 	}
 
@@ -60,53 +65,12 @@ export default class AddStudio extends Component<{}> {
 		let studioData = {
 			name: this.state.name,
 			address: this.state.address,
+			location: this.state.location,
 			open: this.state.open,
 			close: this.state.close,
 		}
 		AsyncStorage.setItem('studioData', JSON.stringify(studioData)).then(() => {
 			this.props.navigation.navigate('Add2')
-		})
-	}
-
-	addByGallery(){
-		ImagePicker.openPicker({
-			multiple: true
-		}).then((images) => {
-			let urls = []
-		for (i in images){
-			const image = images[i]
-			const path = image.path
-			const sessionId = new Date().getTime()
-			let uploadBlob = null
-			const imageRef = storage.ref('Studio').child(`${this.state.user.uid}/images${[i]} - ${sessionId}`)
-			let mime = 'image/jpg'
-			fs.readFile(path, 'base64')
-			.then((data) => {
-				return Blob.build(data, { type: `${mime};BASE64` })
-			})
-			.then((blob) => {
-				uploadBlob = blob
-				return imageRef.put(blob, { contentType: mime })
-			})
-			.then(() => {
-				uploadBlob.close()
-				return imageRef.getDownloadURL()
-			})
-			.then((url) => {
-				urls.push(url)
-				console.log(urls)
-				this.setState({
-					imagesURL: urls,
-					uploading: false
-				})
-				if (this.state.images === i.length) {
-					console.log(this.state.images)
-				}
-			})
-			.catch((e) => {
-				console.log(e)
-			})
-		}
 		})
 	}
 
@@ -117,6 +81,24 @@ export default class AddStudio extends Component<{}> {
 			console.log(images)
 		})
 	}
+
+	 openSearchModal() {
+    RNGooglePlaces.openPlacePickerModal({
+	  latitude: 53.544389,
+	  longitude: -113.490927,
+  })
+    .then((place) => {
+    console.log(place)
+    this.setState({
+    	address: place.address,
+    	location: {
+    		longitude: place.longitude,
+    		latitude: place.latitude,
+    	}
+    })
+    })
+    .catch(error => console.log(error.message));
+  }
 
   render() {
 		console.ignoredYellowBox = ['Remote debugger'];
@@ -144,28 +126,16 @@ export default class AddStudio extends Component<{}> {
 					      />
 
 	  					<FormLabel>Address</FormLabel>
-				  			<FormInput 
-					      	onChangeText={(address) => this.setState({address})}
-					      	placeholder='Address'
-					      	style={styles.formInput}
-					      />
-
-	  					<FormLabel> Open </FormLabel>
-				  			<FormInput 
-					      	onChangeText={(open) => this.setState({open})}
-					      	placeholder='Ex: 08:00'
-					      	style={styles.formInput}
-					      />
-
-					    <FormLabel> Close </FormLabel>
-				  			<FormInput 
-					      	onChangeText={(close) => this.setState({close})}
-					      	placeholder='Ex: 20.00'
-					      	style={styles.formInput}
-					      />
-
+				  			<Text style={{margin:13}} >{this.state.address}</Text>
 		      		</View>
 		      </View>
+
+		      	<TouchableOpacity
+		          style={styles.button}
+		          onPress={() => this.openSearchModal()}
+		        >
+		          <Text style={styles.buttonText} >Pick a Place</Text>
+		        </TouchableOpacity>
 
 		  			<TouchableOpacity
 			       	style={styles.button}

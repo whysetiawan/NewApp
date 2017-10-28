@@ -14,7 +14,6 @@ import MyProfile from '../src/home_screen/My Profile';
 import App from '../src/home_screen/Maps';
 
 export const Stack = StackNavigator({
-	Maps: { screen:App },
 	Index: { screen:Index },
 	Login: { screen:Login },
 	Register: { screen:Register },
