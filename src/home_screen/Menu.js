@@ -58,7 +58,8 @@ export default class Menu extends Component<{}> {
           address: data.val().address,
           description: data.val().description,
           cost: data.val().cost,
-          images: data.val().images
+          images: data.val().images,
+          location: data.val().location,
         })
       })
       this.setState({

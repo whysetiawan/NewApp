@@ -9,22 +9,31 @@ import {
   AsyncStorage,
   Image,
   ListView,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import styles from '../../components/assets/style';
 import firebase from '../../components/assets/Firebase';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { 
   Card,
   ListItem,
   Button,
-  Header } from 'react-native-elements'
+  Header,
+  FormInput } from 'react-native-elements'
 
 export default class Detail extends Component<{}> {
   constructor(){
     super();
     this.state = {
       data:{},
-      user: []
+      user: [],
+      region: {
+        latitude: null,
+        longitude: null,
+        latitudeDelta: null,
+        longitudeDelta: null,
+      }
     }
   }
   componentWillMount(){
@@ -36,16 +45,22 @@ export default class Detail extends Component<{}> {
     })
     let { params } = this.props.navigation.state;
     const data = params.data;
-    console.log(data)
     this.setState({
-      data: data
+      data: data,
+      region: {
+        latitude: data.location.latitude,
+        longitude: data.location.longitude,
+        latitudeDelta: data.location.latitudeDelta,
+        longitudeDelta: data.location.longitudeDelta,
+      }
     })
   }
   render(){
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
-    const items = this.state.data
+    const items = this.state.data;
     return(
+      <ScrollView>
       <View>
         <Card
           title={items.name}
@@ -61,8 +76,34 @@ export default class Detail extends Component<{}> {
           <Card>
             <Text style={styles.normalText}> {items.description} </Text>
           </Card>
+          <Card>
+            <View style={styles.map}>
+              <MapView
+                provider={ PROVIDER_GOOGLE }
+                style={ styles.container }
+                showsUserLocation={ true }
+                region={ this.state.region }
+              >
+              <MapView.Marker
+                coordinate={ this.state.region }
+              />
+              </MapView>
+            </View>
+          </Card>
+            <View style={{flexDirection:'row', paddingTop:10}}>
+              <Text style={styles.normalText} > Number of Hours </Text>
+              <FormInput
+              />
+            </View>
+              <TouchableOpacity
+              style={styles.button}
+              onPress={() => this.props.navigation.navigate('Book')}
+              >
+              <Text style={styles.buttonText}> Book Studio </Text>
+            </TouchableOpacity>
         </Card>
       </View>
+      </ScrollView>
     )
   }
 }

@@ -14,7 +14,8 @@ import {
   TouchableOpacity,
   ImageBackground,
   AsyncStorage,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from 'react-native';
 import styles from '../../components/assets/style';
 import { FormLabel, FormInput, Header} from 'react-native-elements';
@@ -25,10 +26,12 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 
-	const Blob = RNFetchBlob.polyfill.Blob
-	const fs = RNFetchBlob.fs
-	window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-	window.Blob = Blob
+	let { width, height } = Dimensions.get('window');
+	const ASPECT_RATIO = width / height;
+	const LATITUDE = 0;
+	const LONGITUDE = 0;
+	const LATITUDE_DELTA = 0.0922;
+	const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 	const database = firebase.database();
 	const storage = firebase.storage();
@@ -43,7 +46,9 @@ export default class AddStudio extends Component<{}> {
 			close: '',
 			location: {
 				longitude: null,
-				latitude: null
+				latitude: null,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
 			},
 		}
 	}
@@ -61,6 +66,21 @@ export default class AddStudio extends Component<{}> {
     })
 	}
 
+	componentDidMount(){
+		navigator.geolocation.getCurrentPosition(
+      (position) => {
+      	this.setState({
+      		location: {
+      			longitude: position.coords.longitude,
+      			latitude: position.coords.latitude,
+      		}
+      	})
+      },
+    (error) => console.log(error.message),
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+	}
+
 	Next(){
 		let studioData = {
 			name: this.state.name,
@@ -70,22 +90,22 @@ export default class AddStudio extends Component<{}> {
 			close: this.state.close,
 		}
 		AsyncStorage.setItem('studioData', JSON.stringify(studioData)).then(() => {
+			AsyncStorage.mergeItem('studioData', JSON.stringify({
+				location: {
+					latitudeDelta: LATITUDE_DELTA,
+					longitudeDelta: LONGITUDE_DELTA
+				}
+			}))
 			this.props.navigation.navigate('Add2')
 		})
 	}
 
-	addByCamera(){
-		ImagePicker.openCamera({
-			cropping: true
-		}).then((images) => {
-			console.log(images)
-		})
-	}
-
-	 openSearchModal() {
+	openSearchModal() {
     RNGooglePlaces.openPlacePickerModal({
-	  latitude: 53.544389,
-	  longitude: -113.490927,
+	  latitude: this.state.location.latitude,
+	  longitude: this.state.location.longitude,
+	  latitudeDelta: LATITUDE_DELTA,
+	  longitudeDelta: LONGITUDE_DELTA,
   })
     .then((place) => {
     console.log(place)

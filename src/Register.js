@@ -30,6 +30,7 @@ export default class App extends Component<{}> {
 				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password,
+        profileimg: ''
 			})
 				user.updateProfile({
 					displayName: this.state.name,

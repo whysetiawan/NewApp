@@ -104,7 +104,8 @@ export default class AddStudio extends Component<{}> {
 					close: this.state.data.close,
 					cost:this.state.data.cost,
 					description: this.state.data.description,
-					images: this.state.imagesURL
+					images: this.state.imagesURL,
+					location: this.state.data.location
 				})
 			}
 	}

@@ -73,7 +73,7 @@ export default class MapExample extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    height: 200,
     width: '100%',
   }
 });

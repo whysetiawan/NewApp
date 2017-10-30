@@ -44,6 +44,7 @@ export default class MyStudio extends Component<{}> {
   render(){
     console.ignoredYellowBox = ['Remote debugger'];
     console.ignoredYellowBox = ['Setting a timer'];
+    console.log(this.state.userData)
     const user = this.state.userData;
     const img = this.state.userData.profileimg;
     const avatar = "http://www.nowseethis.org/avatars/default/missing.gif";

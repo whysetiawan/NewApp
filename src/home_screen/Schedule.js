@@ -85,14 +85,7 @@ export default class EditStudio extends Component<{}> {
 				          maxDate="2018-12-31"
 				          onDateChange={(date) => {this.setState({date: date});}}
 				        />
-				        <DatePicker
-				        	style={{width:150, margin:10}}
-				        	mode="time"
-				        	format="HH:mm"
-				        	minuteInterval={10}
-				        	onDateChange={(time) => this.setState({time})}
-				        	placeholder='Select Time'
-				        	/>
+				        
 				        </View>
 				        <Text>
 				        	{this.state.time}
